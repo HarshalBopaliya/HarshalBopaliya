@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 export default function Textform(props) {
+ 
 
   const handleUpClick = () => {
     // console.log("Uppercase was clicked" + " "+  text);
@@ -31,8 +32,8 @@ const handleOnChange = (event) => {
     console.log("I am copy");
     var text = document.getElementById("mybox");
     text.select();
-    text.setSelectionRange(0,9999);
     navigator.clipboard.writeText(text.value);
+    document.getSelection().removeAllRanges();
     props.showAlert(" Copy text ","success")
   };
 
@@ -47,7 +48,7 @@ const handleOnChange = (event) => {
       <div className="container"
       style={{color: props.mode ==='dark'?'white':'black'}}
       >
-        <h1>Enter the text to analyze below</h1>
+        <h1 className="mb-4">{props.heading}</h1>
         <div className="mb-3">
           {/* <label for="mybox" class="form-label">Example textarea</label> */}
           <textarea
@@ -55,25 +56,25 @@ const handleOnChange = (event) => {
             value={text}
             onChange={handleOnChange}
             
-            style={{backgroundColor: props.mode ==='dark'?"#333333":'white', color: props.mode ==='dark'?'white':'black'}}
+            style={{backgroundColor: props.mode ==='dark'?"#13466e":'white', color: props.mode ==='dark'?'white':'black'}}
             id="mybox"
             rows="8"
           
           ></textarea>
         </div>
-        <button className="btn btn-primary mx-1" onClick={handleUpClick} 
+        <button disabled={text.length===0} className="btn btn-primary mx-1 my-1" onClick={handleUpClick} 
         
-        style={{backgroundColor: props.mode ==='dark'?'#333333':'white', color: props.mode ==='dark'?'white':'black'}}
+        style={{backgroundColor: props.mode ==='dark'?'#13466e':'white', color: props.mode ==='dark'?'white':'black'}}
         >
           Convert to Uppercase
         </button>
-        <button className="btn btn-primary mx-1" onClick={handleloClick} style={{backgroundColor: props.mode ==='dark'?'#333333':'white', color: props.mode ==='dark'?'white':'black'}}>
+        <button disabled={text.length===0} className="btn btn-primary mx-1 my-1" onClick={handleloClick} style={{backgroundColor: props.mode ==='dark'?'#13466e':'white', color: props.mode ==='dark'?'white':'black'}}>
           Convert to Lowercase
         </button>
-        <button className="btn btn-primary mx-1" onClick={handleClick} style={{backgroundColor: props.mode ==='dark'?'#333333':'white', color: props.mode ==='dark'?'white':'black'}}>
+        <button disabled={text.length===0} className="btn btn-primary mx-1 my-1" onClick={handleClick} style={{backgroundColor: props.mode ==='dark'?'#13466e':'white', color: props.mode ==='dark'?'white':'black'}}>
           Clear text
         </button>
-        <button className="btn btn-primary mx-1" onClick={handleCopy} style={{backgroundColor: props.mode ==='dark'?'#333333':'white', color: props.mode ==='dark'?'white':'black'}}>
+        <button disabled={text.length===0} className="btn btn-primary mx-1 my-1" onClick={handleCopy} style={{backgroundColor: props.mode ==='dark'?'#13466e':'white', color: props.mode ==='dark'?'white':'black'}}>
           Copy text
         </button>
        
@@ -83,14 +84,14 @@ const handleOnChange = (event) => {
       >
         <h2>yout text summary</h2>
         <p>
-          {" "}
-          {text.split(" ").length} words and {text.length} character
+          {text.split(/\s+/).filter((element)=>{return element.length!==0}).length} words and {text.length} character
         </p>
-        <p> {0.008 * text.split(" ").length} Minutes read</p>
+        <p> {0.008 * text.split(" ").filter((element)=>{return element.length!==0}).length} Minutes read</p>
         <h2>preview</h2>
-        <p>{text.length>0?text:"Enter something in the textbox above to preview it here"}</p>
+        <p>{text.length>0?text:"Nothing to preview!"}</p>
       </div>
       
     </>
   );
 }
+
